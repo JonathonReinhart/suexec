@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pwd.h>
+#include <grp.h>
 
 /**
  * SYNOPSIS
@@ -86,6 +87,12 @@ change_user(const char *username)
         errmsg("Failed to get pwd entry for user \"%s\": %m\n", username);
         return -1;
     }
+
+    if (setgroups(0, NULL) != 0) {
+        errmsg("Failed to setgroups(): %m\n");
+        return -1;
+    }
+    verbose("Cleared supplementary group list\n");
 
     if (setgid(pw->pw_gid) != 0) {
         errmsg("Failed to setgid(%u): %m\n", (unsigned int)pw->pw_gid);
