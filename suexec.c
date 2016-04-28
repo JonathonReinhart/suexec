@@ -115,6 +115,15 @@ main(int argc, char **argv)
 {
     int idx;
 
+    /**
+     * This is the assumption that execv() makes.
+     * This appears to be true on every system I've tried, although I cannot
+     * find anything that guarantees this. So make sure the element after the
+     * last is a NULL terminator. If we find that this faults on a system, we
+     * can do the annoying and expensive duplication.
+     */
+    argv[argc] = NULL;
+
     printf("Program args:\n");
     print_argv(argc, argv);
 
