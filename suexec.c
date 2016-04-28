@@ -113,6 +113,8 @@ change_user(const char *username)
 int
 main(int argc, char **argv)
 {
+    char **new_argv;
+    int new_argc;
     int idx;
 
     /**
@@ -131,15 +133,17 @@ main(int argc, char **argv)
         exit(99);
     }
 
-    printf("To-be executed args:\n");
-    print_argv(argc-idx, argv+idx);
+    new_argc = argc - idx;
+    new_argv = argv + idx;
 
+    printf("To-be executed args:\n");
+    print_argv(new_argc, new_argv);
 
     if (change_user(m_user) < 0)
         exit(99);
 
-    pause();
+    execvp(new_argv[0], new_argv);
 
-
-    return 0;
+    errmsg("execv() failed: %m\n");
+    exit(99);
 }
