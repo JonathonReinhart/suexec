@@ -88,6 +88,12 @@ change_user(const char *username)
         return -1;
     }
 
+    if (chdir(pw->pw_dir) != 0) {
+        errmsg("Failed to chdir to home dir %s: %m\n", pw->pw_dir);
+        return -1;
+    }
+    verbose("Changed working directory to %s\n", pw->pw_dir);
+
     if (setgroups(0, NULL) != 0) {
         errmsg("Failed to setgroups(): %m\n");
         return -1;
