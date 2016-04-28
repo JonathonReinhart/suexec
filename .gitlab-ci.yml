@@ -1,0 +1,7 @@
+image: gcc:latest
+
+build:
+  tags:
+    - docker
+  script:
+    - scons
